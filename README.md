@@ -1,58 +1,183 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# BlueHour
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+BlueHour adalah aplikasi web berbasis Laravel untuk **pemesanan jasa jahit online**. Pelanggan dapat membuat pesanan jahit custom, mengirim ukuran badan serta gambar referensi/desain, lalu mengunggah bukti pembayaran. Admin mengelola layanan, memberikan estimasi harga, memproses pesanan, dan memverifikasi pembayaran.
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Halaman publik
+- Landing page dengan informasi layanan, keunggulan, testimoni, dan FAQ.
+- Daftar layanan jahit yang aktif.
+- Registrasi dan login pengguna.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Pelanggan
+- Dashboard dengan ringkasan pesanan.
+- Membuat pesanan baru: pilih layanan, isi catatan, ukuran badan, sumber bahan, serta upload gambar referensi dan desain.
+- Melihat daftar dan detail pesanan.
+- Mengunggah bukti pembayaran.
+- Membatalkan pesanan selama status masih `menunggu_estimasi` atau `menunggu_pembayaran`.
+- Mengubah profil dan password.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Admin
+- Dashboard statistik: jumlah pelanggan, layanan, pesanan, pendapatan, estimasi tertunda, dan pembayaran tertunda.
+- CRUD layanan (tambah, lihat, ubah, hapus) beserta gambar layanan.
+- Melihat dan mencari seluruh pesanan.
+- Memberikan estimasi harga dan mengubah status pesanan.
+- Memverifikasi atau menolak bukti pembayaran.
+- Melihat log aktivitas pengguna.
 
-## Learning Laravel
+## Alur pesanan
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Pelanggan mendaftar atau login.
+2. Pelanggan membuat pesanan dan mengisi ukuran badan serta detail jahitan.
+3. Admin melihat pesanan, mengisi estimasi harga, lalu mengubah status menjadi `menunggu_pembayaran`.
+4. Pelanggan mengunggah bukti pembayaran.
+5. Admin memverifikasi pembayaran. Jika disetujui, status pesanan menjadi `diproses`.
+6. Admin memperbarui status sesuai progres: `penjahitan` → `finishing` → `selesai` → `dikirim`.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Status pesanan
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+| Status | Keterangan |
+| --- | --- |
+| `menunggu_estimasi` | Pesanan baru, menunggu estimasi harga dari admin |
+| `menunggu_pembayaran` | Estimasi sudah diberikan, menunggu pembayaran pelanggan |
+| `diproses` | Pembayaran terverifikasi, pesanan mulai diproses |
+| `penjahitan` | Pesanan sedang dijahit |
+| `finishing` | Tahap penyelesaian akhir |
+| `selesai` | Pesanan selesai |
+| `dikirim` | Pesanan dikirim ke pelanggan |
+| `dibatalkan` | Pesanan dibatalkan |
 
-## Agentic Development
+### Status pembayaran
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+| Status | Keterangan |
+| --- | --- |
+| `belum_bayar` | Belum ada bukti pembayaran |
+| `menunggu_verifikasi` | Bukti sudah diunggah, menunggu verifikasi admin |
+| `terverifikasi` | Pembayaran disetujui admin |
+| `ditolak` | Bukti pembayaran ditolak admin |
 
-```bash
-composer require laravel/boost --dev
+## Teknologi
 
-php artisan boost:install
-```
+- **Laravel 13** (PHP 8.3+)
+- **MySQL 8**
+- **Blade**, **Tailwind CSS 3**, **Alpine.js 3**
+- **Vite 8**
+- **Laravel Breeze** untuk autentikasi
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+## Kebutuhan sistem
 
-## Contributing
+- PHP 8.3 atau lebih baru dengan ekstensi `pdo_mysql`, `mbstring`, `openssl`, `fileinfo`, dan `zip`.
+- Composer 2.
+- Node.js 20.19+ atau 22.12+ dan npm.
+- MySQL 8.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Instalasi
 
-## Code of Conduct
+1. Clone repository:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```powershell
+   git clone https://github.com/Sykye/bluehour.git
+   cd bluehour
+   ```
 
-## Security Vulnerabilities
+2. Install dependency PHP:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```powershell
+   composer install
+   ```
 
-## License
+3. Buat file `.env` dari template:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```powershell
+   Copy-Item .env.example .env
+   php artisan key:generate
+   ```
+
+4. Buat database MySQL:
+
+   ```sql
+   CREATE DATABASE bluehour_db
+   CHARACTER SET utf8mb4
+   COLLATE utf8mb4_unicode_ci;
+   ```
+
+5. Sesuaikan konfigurasi database di `.env`:
+
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=bluehour_db
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
+
+6. Jalankan migrasi dan seeder:
+
+   ```powershell
+   php artisan migrate --seed
+   ```
+
+7. Buat symbolic link storage untuk gambar upload:
+
+   ```powershell
+   php artisan storage:link
+   ```
+
+8. Install dependency frontend dan build aset:
+
+   ```powershell
+   npm install
+   npm run build
+   ```
+
+9. Jalankan server:
+
+   ```powershell
+   php artisan serve
+   ```
+
+10. Buka **http://127.0.0.1:8000**.
+
+## Akun default
+
+Seeder membuat akun admin berikut:
+
+| Role | Email | Password |
+| --- | --- | --- |
+| Admin | `admin@bluehour.com` | `Admin@12345` |
+
+Pelanggan baru dapat mendaftar melalui halaman `/register`. Setelah login pertama, disarankan mengganti password admin.
+
+## Struktur proyek
+
+| Path | Keterangan |
+| --- | --- |
+| `app/Http/Controllers/Admin` | Controller untuk admin (layanan, pesanan, log aktivitas) |
+| `app/Http/Controllers/User` | Controller untuk pelanggan (pesanan dan pembayaran) |
+| `app/Http/Controllers/Auth` | Autentikasi dari Laravel Breeze |
+| `app/Models` | Model `User`, `Service`, `Order`, dan `ActivityLog` |
+| `app/Policies` | Aturan akses `OrderPolicy` dan `ServicePolicy` |
+| `app/Http/Middleware` | `RoleMiddleware` dan `SecurityHeadersMiddleware` |
+| `app/Http/Requests` | Validasi form pesanan, layanan, pembayaran, dan profil |
+| `database/migrations` | Skema tabel aplikasi |
+| `database/seeders` | Seeder admin dan layanan contoh |
+| `resources/views` | Tampilan Blade untuk publik, admin, dan pelanggan |
+| `routes/web.php` | Routing utama aplikasi |
+
+## Keamanan
+
+- Middleware `role` membatasi akses halaman admin dan pelanggan.
+- Policy `OrderPolicy` dan `ServicePolicy` mengatur hak akses per pengguna.
+- CSRF protection aktif pada seluruh form.
+- Validasi upload file membatasi ekstensi dan MIME type gambar.
+- Nama file upload dibuat acak (UUID) untuk menghindari path traversal.
+- `SecurityHeadersMiddleware` menambahkan header keamanan (CSP, X-Frame-Options, X-Content-Type-Options, dan lainnya).
+- Aktivitas penting dicatat ke tabel `activity_logs`.
+
+## Catatan pengembangan
+
+- File `.env` tidak disertakan di repository karena berisi kredensial. Selalu buat `.env` baru dari `.env.example`.
+- Folder `public/build`, `vendor`, dan `node_modules` tidak disertakan. Jalankan `composer install`, `npm install`, dan `npm run build` setelah clone.
+- Untuk melihat tampilan final, gunakan `npm run build`. Mode `npm run dev`/`composer run dev` menjalankan Vite di port 5173; middleware CSP saat ini hanya mengizinkan aset dari origin aplikasi, jadi aset Vite dapat diblokir browser. Jika ingin memakai hot reload, sesuaikan CSP agar mengizinkan `http://localhost:5173` dan `http://[::1]:5173`.
+- Email menggunakan `MAIL_MAILER=log`. Link reset password akan tertulis di `storage/logs/laravel.log`, bukan dikirim ke email sungguhan.
